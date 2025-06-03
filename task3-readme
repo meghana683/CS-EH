@@ -1,0 +1,99 @@
+Here’s a complete and well-formatted **README.md** for your **Penetration Testing Toolkit**, including usage, code examples, and a legal disclaimer.
+
+---
+
+````markdown
+# 🛠️ Penetration Testing Toolkit
+
+A simple, Python-based toolkit for basic penetration testing tasks.  
+Includes:
+
+- ✅ TCP Port Scanner  
+- ✅ HTTP Basic Authentication Brute Forcer
+
+This tool is intended for **educational purposes** and **authorized security testing only**.
+
+---
+
+## 📦 Features
+
+- Scan TCP ports on a remote host.
+- Brute-force HTTP Basic Auth login pages with a user-provided password list.
+- Easy to use via the command line.
+- Lightweight and dependency minimal.
+
+---
+
+## 📋 Requirements
+
+- Python 3.x  
+- `requests` library
+
+Install dependencies with:
+
+```bash
+pip install requests
+````
+
+---
+
+## 🚀 Usage
+
+### 🔍 Port Scanning
+
+Scan a range of TCP ports on a target IP:
+
+```bash
+python pentest_toolkit.py scan --target 192.168.1.10 --ports 1-100
+```
+
+### 🔐 HTTP Basic Auth Brute-Force
+
+Try a list of passwords against a URL protected by HTTP Basic Auth:
+
+```bash
+python pentest_toolkit.py brute --url http://example.com --user admin --wordlist passwords.txt
+```
+
+---
+
+## 🧠 Example Wordlist
+
+Example contents of `passwords.txt`:
+
+```
+123456
+password
+admin
+qwerty
+letmein
+```
+
+---
+
+## 📁 File Structure
+
+* `pentest_toolkit.py` – Combined CLI tool with port scanner and brute forcer.
+* `passwords.txt` – Password list for brute force (you provide this file).
+
+---
+
+## 🧪 Sample Output
+
+**Port Scan Example:**
+
+```
+[INFO] Scanning 192.168.1.10 from port 1 to 100
+[OPEN] Port 22
+[OPEN] Port 80
+```
+
+**Brute Force Example:**
+
+```
+[FAILED] 123456
+[FAILED] qwerty
+[SUCCESS] Password found: admin
+```
+
+---
