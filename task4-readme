@@ -1,0 +1,137 @@
+Here’s the **README.md** without the code, focusing purely on the process, features, and usage instructions for the **Advanced Encryption Tool (AES-256)**.
+
+---
+
+# 🔐 Advanced Encryption Tool (AES-256)
+
+A Python-based tool that uses **AES-256** encryption and decryption for file security. This tool ensures your files remain private and secure using strong encryption algorithms.
+
+---
+
+## 🧠 **How It Works**
+
+### **1. AES-256 Encryption**
+
+AES (Advanced Encryption Standard) is a symmetric encryption algorithm, meaning the same key is used for both encryption and decryption. **AES-256** uses a 256-bit key, providing a high level of security.
+
+This tool uses **AES in GCM (Galois/Counter Mode)**, which provides both encryption and authentication. This ensures the file’s content is encrypted, and its integrity is protected during the decryption process.
+
+### **2. Key Generation: Scrypt KDF**
+
+Rather than directly using the user’s password as the encryption key, the tool employs **Scrypt** (a key derivation function) to generate a 256-bit key from the password. This provides several benefits:
+
+* **Stronger security**: The password is never directly used as the encryption key.
+* **Protection against brute-force attacks**: Scrypt is computationally intensive, making brute-forcing harder.
+
+The key derivation process involves combining the user’s password with a **random salt** to produce a secure key for AES encryption.
+
+### **3. Encryption Process**
+
+* **File Input**: The file to be encrypted is read in binary mode.
+* **Salt Generation**: A random 16-byte salt is generated.
+* **Key Derivation**: The password and salt are passed through Scrypt to generate a secure AES-256 key.
+* **Encryption**: The file is encrypted using the AES-256 key and GCM mode. The resulting file consists of:
+
+  * **Ciphertext**: The encrypted content of the file.
+  * **Tag**: An authentication tag to ensure data integrity.
+  * **Nonce**: A unique number used to prevent re-use of the same key on different data.
+
+The encrypted file is saved with a `.enc` extension.
+
+### **4. Decryption Process**
+
+* **File Input**: The encrypted file is read.
+* **Extract Data**: The salt, nonce, tag, and ciphertext are extracted from the file.
+* **Key Derivation**: The password and salt are used to derive the AES-256 key again.
+* **Decryption**: The file is decrypted using the AES-256 key and GCM mode. The tag is used to verify the integrity of the file during decryption.
+* **Integrity Check**: If the tag doesn’t match, or if the file has been tampered with, decryption fails.
+* **File Output**: The decrypted file is saved with a `.dec` extension if successful.
+
+---
+
+## 📦 **Features**
+
+* **AES-256 Encryption**: Strong encryption with 256-bit AES.
+* **GCM Mode**: Combines encryption with data authentication for integrity verification.
+* **Scrypt KDF**: Uses a secure key derivation function to generate the encryption key from the user’s password.
+* **Error Handling**: Handles decryption failures due to incorrect passwords or corrupted files.
+* **Command-Line Interface**: Simple and easy-to-use interface for encryption and decryption tasks.
+
+---
+
+## 🧰 **Requirements**
+
+To use the tool, you will need:
+
+* **Python 3.x**
+* **`pycryptodome` library** for AES-256 encryption and decryption.
+
+### Installation:
+
+To install the required dependencies, use the following:
+
+```bash
+pip install pycryptodome
+```
+
+---
+
+## 🚀 **Usage**
+
+### **1. Encrypting a File**
+
+To encrypt a file, use the following command:
+
+```bash
+python encryption_tool.py encrypt <path_to_file> <your_password>
+```
+
+* **`<path_to_file>`**: Path to the file you want to encrypt.
+* **`<your_password>`**: Password for encrypting the file.
+
+The tool will create an encrypted version of the file with the `.enc` extension.
+
+### **2. Decrypting a File**
+
+To decrypt a file, use the following command:
+
+```bash
+python encryption_tool.py decrypt <path_to_encrypted_file> <your_password>
+```
+
+* **`<path_to_encrypted_file>`**: Path to the `.enc` file you want to decrypt.
+* **`<your_password>`**: Password used for encryption.
+
+If the decryption is successful, the tool will output the file with a `.dec` extension.
+
+---
+
+## 🧩 **Encryption Process in Detail**
+
+### **File Handling**
+
+* **File Input**: Files are handled in binary mode (`rb` for reading, `wb` for writing) to ensure proper handling of all file types.
+* **Error Handling**: The tool ensures the password is correct during decryption. If the password is incorrect or the file is corrupted, an error message will be shown, and decryption will fail.
+
+### **Key Derivation (Scrypt KDF)**
+
+The **Scrypt KDF** generates a secure key for AES-256 from the password:
+
+1. The password and a **random salt** are passed through the Scrypt function.
+2. Scrypt derives a **256-bit key** that is used for AES encryption or decryption.
+
+This process ensures that the same password will not generate the same encryption key on different runs, as a new salt is used each time.
+
+---
+
+
+## 🔏 **Security Note**
+
+* The strength of the encryption relies on the strength of the password. It is recommended to use **long and complex passwords** (preferably generated by a password manager) to ensure the security of the encrypted file.
+
+---
+
+## 📜 **License**
+
+This project is open-source under the MIT License.
+See the [LICENSE](LICENSE) file for details.
