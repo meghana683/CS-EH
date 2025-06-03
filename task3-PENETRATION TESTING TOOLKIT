@@ -1,0 +1,74 @@
+import socket
+import threading
+import requests
+import argparse
+
+# ---------------------------
+# Port Scanner Module
+# ---------------------------
+def scan_port(ip, port):
+    try:
+        s = socket.socket()
+        s.settimeout(1)
+        s.connect((ip, port))
+        print(f"[OPEN] Port {port}")
+    except:
+        pass
+    finally:
+        s.close()
+
+def scan_ports(ip, start, end):
+    print(f"[INFO] Scanning {ip} from port {start} to {end}")
+    for port in range(start, end + 1):
+        thread = threading.Thread(target=scan_port, args=(ip, port))
+        thread.start()
+
+# ---------------------------
+# Brute Forcer Module
+# ---------------------------
+def brute_force_login(url, username, wordlist_path):
+    try:
+        with open(wordlist_path, "r") as f:
+            for password in f:
+                password = password.strip()
+                response = requests.get(url, auth=(username, password))
+                if response.status_code == 200:
+                    print(f"[SUCCESS] Password found: {password}")
+                    return
+                else:
+                    print(f"[FAILED] {password}")
+        print("[DONE] Brute-force complete. No valid password found.")
+    except FileNotFoundError:
+        print("[ERROR] Wordlist file not found.")
+
+# ---------------------------
+# CLI Interface
+# ---------------------------
+def main():
+    parser = argparse.ArgumentParser(description="Penetration Testing Toolkit (Port Scanner + Brute Forcer)")
+    subparsers = parser.add_subparsers(dest="command")
+
+    scan = subparsers.add_parser("scan", help="Scan ports on a target")
+    scan.add_argument("--target", required=True, help="Target IP address")
+    scan.add_argument("--ports", default="1-1024", help="Port range (e.g., 1-1000)")
+
+    brute = subparsers.add_parser("brute", help="Brute-force HTTP Basic Auth")
+    brute.add_argument("--url", required=True, help="Target login URL")
+    brute.add_argument("--user", required=True, help="Username to try")
+    brute.add_argument("--wordlist", required=True, help="Path to password list")
+
+    args = parser.parse_args()
+
+    if args.command == "scan":
+        try:
+            start, end = map(int, args.ports.split('-'))
+            scan_ports(args.target, start, end)
+        except ValueError:
+            print("[ERROR] Invalid port range format.")
+    elif args.command == "brute":
+        brute_force_login(args.url, args.user, args.wordlist)
+    else:
+        parser.print_help()
+
+if __name__ == "__main__":
+    main()
