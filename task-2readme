@@ -1,0 +1,59 @@
+Sure! Here's a **README** (without any code) for the simplified **Web Application Vulnerability Scanner**:
+
+---
+
+# 🔍 Web Application Vulnerability Scanner
+
+## 📖 Overview
+
+This is a lightweight Python-based tool designed to help security testers and developers identify common vulnerabilities in web applications, specifically:
+
+* **SQL Injection (SQLi)**
+* **Cross-Site Scripting (XSS)**
+
+The scanner works by sending crafted payloads to URL parameters and form inputs, then analyzing the server's response for signs of vulnerability.
+
+---
+
+## 🚀 Features
+
+* Detects basic SQLi and XSS vulnerabilities
+* Scans both URL parameters and HTML forms
+* Uses simple payload-based testing
+* Fast, minimal, and easy to run from the command line
+* No external dependencies beyond `requests` and `BeautifulSoup`
+
+---
+
+## 🧰 Requirements
+
+* Python 3.x
+* `requests` library
+* `beautifulsoup4` library
+
+---
+
+## 🎯 How It Works
+
+1. **URL Parameter Testing**
+   Sends SQLi and XSS payloads via URL query parameters and checks if the response contains reflections of the payload (indicating a possible vulnerability).
+
+2. **Form Testing**
+   Detects all input forms on the target page, submits them with test payloads, and checks if the payloads are reflected in the server response.
+
+---
+
+## 🛡️ What It Detects
+
+* **SQL Injection**: Looks for reflections or error messages triggered by common SQL payloads.
+* **XSS (Cross-Site Scripting)**: Detects if scripts are reflected unsanitized in the server's response.
+
+---
+
+## 💡 Use Cases
+
+* Security testing of web apps in development or staging environments
+* Educational demonstrations of common web vulnerabilities
+* Quick initial vulnerability check before deeper analysis
+
+---
