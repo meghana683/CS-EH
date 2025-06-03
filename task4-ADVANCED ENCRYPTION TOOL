@@ -1,0 +1,64 @@
+from Crypto.Cipher import AES
+from Crypto.Protocol.KDF import scrypt
+import os
+import base64
+import argparse
+
+# AES Key Generation (Scrypt KDF)
+def generate_key(password, salt):
+    return scrypt(password.encode(), salt, key_len=32, N=2**14, r=8, p=1)
+
+# AES Encryption
+def encrypt_file(file_path, password):
+    salt = os.urandom(16)
+    key = generate_key(password, salt)
+    cipher = AES.new(key, AES.MODE_GCM)
+
+    with open(file_path, 'rb') as file:
+        file_data = file.read()
+
+    ciphertext, tag = cipher.encrypt_and_digest(file_data)
+
+    # Save the encrypted file
+    with open(f"{file_path}.enc", 'wb') as enc_file:
+        enc_file.write(salt + cipher.nonce + tag + ciphertext)
+
+    print(f"File encrypted and saved as {file_path}.enc")
+
+# AES Decryption
+def decrypt_file(file_path, password):
+    with open(file_path, 'rb') as enc_file:
+        data = enc_file.read()
+
+    salt = data[:16]
+    nonce = data[16:32]
+    tag = data[32:48]
+    ciphertext = data[48:]
+
+    key = generate_key(password, salt)
+    cipher = AES.new(key, AES.MODE_GCM, nonce=nonce)
+
+    try:
+        decrypted_data = cipher.decrypt_and_verify(ciphertext, tag)
+        with open(f"{file_path[:-4]}.dec", 'wb') as dec_file:
+            dec_file.write(decrypted_data)
+        print(f"File decrypted and saved as {file_path[:-4]}.dec")
+    except (ValueError, KeyError):
+        print("[ERROR] Decryption failed. Invalid password or corrupted file.")
+
+# CLI Interface
+def main():
+    parser = argparse.ArgumentParser(description="AES-256 Encryption and Decryption Tool")
+    parser.add_argument("action", choices=["encrypt", "decrypt"], help="Action to perform (encrypt or decrypt)")
+    parser.add_argument("file", help="File to encrypt or decrypt")
+    parser.add_argument("password", help="Password for encryption or decryption")
+
+    args = parser.parse_args()
+
+    if args.action == "encrypt":
+        encrypt_file(args.file, args.password)
+    elif args.action == "decrypt":
+        decrypt_file(args.file, args.password)
+
+if __name__ == "__main__":
+    main()
