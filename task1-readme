@@ -1,0 +1,69 @@
+Sure! Here's a **README (without code)** that explains what the tool does, how to use it, and what each part means:
+
+---
+
+# 🛡️ File Integrity Checker
+
+## 📖 Overview
+
+The File Integrity Checker is a lightweight Python tool designed to monitor and ensure the integrity of files and directories. It does this by generating and comparing cryptographic hash values (SHA-256) to detect if any files have been **modified**, **deleted**, or **added**.
+
+---
+
+## 🚀 Features
+
+* Scans individual files or entire directories.
+* Generates secure SHA-256 hash values.
+* Saves hashes in a local JSON file.
+* Detects file changes by comparing current state to saved hash records.
+* Minimal, fast, and easy to use.
+
+---
+
+## 🧰 Requirements
+
+* Python 3.x (no external libraries needed)
+
+---
+
+## 📂 How It Works
+
+1. **Scan Mode (`scan`)**
+
+   * Calculates the hash of each file.
+   * Saves all file paths and hashes into a JSON file (`hashes.json`).
+
+2. **Check Mode (`check`)**
+
+   * Recalculates current file hashes.
+   * Compares them with previously stored hashes.
+   * Reports:
+
+     * Modified files
+     * Missing (deleted) files
+     * New files not present in the original scan
+
+---
+
+## 🕹️ Usage
+
+1. Run the script in **scan** mode to generate and save the initial file hashes.
+2. Later, run the script in **check** mode to detect changes.
+
+---
+
+## 🔐 Why Use It?
+
+* Detect tampering in important files.
+* Monitor configuration or source code directories.
+* Keep track of sensitive or critical system files.
+* Lightweight alternative to complex security software.
+
+---
+
+## 📎 Notes
+
+* The hash record (`hashes.json`) must be kept safe. If it's modified or deleted, comparisons won't be accurate.
+* Only tracks content changes, not metadata like timestamps.
+
+---
